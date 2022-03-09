@@ -1,0 +1,8 @@
+.skillsList {
+  background-color: #dddddd;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  width: 100%;
+}

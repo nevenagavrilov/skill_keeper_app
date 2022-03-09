@@ -1,0 +1,9 @@
+.profilesList {
+  background-color: #dddddd;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  text-decoration: none;
+  width: 100%;
+}
