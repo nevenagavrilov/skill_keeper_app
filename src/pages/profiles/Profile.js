@@ -20,56 +20,54 @@ const Profile = (props) => {
   };
 
   return (
-    <>
-      <Card
-        style={{
-          width: "100%",
-          bgcolor: "background.paper",
-          maxWidth: "400px",
-          margin: "5px",
-        }}
-      >
-        <List>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt={props.name} src={props.image} />
-            </ListItemAvatar>
-            <ListItemText>
-              <React.Fragment>
-                <Typography gutterBottom variant="h5" component="div">
-                  {props.name}
-                </Typography>
-                <Typography gutterBottom component="div">
-                  {props.dateOfBirth}
-                </Typography>
-                <Typography gutterBottom component="div">
-                  {props.location}
-                </Typography>
-                <Typography gutterBottom component="div">
-                  {props.skills}
-                </Typography>
-              </React.Fragment>
-            </ListItemText>
-          </ListItem>
-          <ListItem alignItems="center">
-            <IconButton
-              aria-label="delete"
-              size="small"
-              onClick={deleteProfileHandler}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton
-              aria-label="edit"
-              size="small"
-              onClick={selectProfileHandler}
-            >
-              <EditTwoToneIcon />
-            </IconButton>
-          </ListItem>
-        </List>
-      </Card>
-    </>
+    <Card
+      style={{
+        width: "100%",
+        bgcolor: "background.paper",
+        maxWidth: "400px",
+        margin: "5px",
+      }}
+    >
+      <List>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar alt={props.name} src={props.image} />
+          </ListItemAvatar>
+          <ListItemText>
+            <React.Fragment>
+              <Typography gutterBottom variant="h5" component="div">
+                {props.name}
+              </Typography>
+              <Typography gutterBottom component="div">
+                {props.dateOfBirth}
+              </Typography>
+              <Typography gutterBottom component="div">
+                {props.location}
+              </Typography>
+              <Typography gutterBottom component="div">
+                {props.skills}
+              </Typography>
+            </React.Fragment>
+          </ListItemText>
+        </ListItem>
+        <ListItem alignItems="center">
+          <IconButton
+            aria-label="delete"
+            size="small"
+            onClick={deleteProfileHandler}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            aria-label="edit"
+            size="small"
+            onClick={selectProfileHandler}
+          >
+            <EditTwoToneIcon />
+          </IconButton>
+        </ListItem>
+      </List>
+    </Card>
   );
 };
 

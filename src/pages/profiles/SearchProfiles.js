@@ -35,7 +35,6 @@ const SearchProfiles = (props) => {
 
   const dropdownChnageHandler = () => {
     let name = nameRef.current.value;
-
     props.onChangeFilter(name);
   };
 

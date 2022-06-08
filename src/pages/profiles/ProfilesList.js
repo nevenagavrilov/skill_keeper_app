@@ -3,101 +3,37 @@ import Box from "@mui/material/Box";
 import { useEffect, useState, useCallback } from "react";
 import Profile from "./Profile";
 import classes from "./ProfilesList.module.css";
-
-import SearchProfiles from "./SearchProfiles";
-
+// import SearchProfiles from "./SearchProfiles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import useHttp from "../../hooks/useHttp";
 
-const ProfilesList = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const [isClicked, setIsClicked] = useState(false);
-
+const ProfilesList = ({
+  profiles,
+  deleteProfileHandler,
+  updateProfileHandler,
+  isUpdateOpen,
+  updateProfile,
+}) => {
   const [profileId, setProfileId] = useState(null);
   const [profileImage, setProfileImage] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileDateOfBirth, setProfileDateOfBirth] = useState("");
   const [profileLocation, setProfileLocation] = useState("");
 
-  const fetchProfilesHandler = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        "https://6195285474c1bd00176c6be7.mockapi.io/profiles"
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-      const data = await response.json();
-
-      const loadedProfiles = [];
-      for (const key in data) {
-        loadedProfiles.push({
-          id: data[key].id,
-          name: data[key].name,
-          image: data[key].image,
-          dateOfBirth: data[key].dateOfBirth,
-          location: data[key].location,
-          skills: data[key].skills,
-        });
-      }
-      setProfiles(loadedProfiles);
-    } catch (error) {
-      setError(error.message);
-    }
-    setIsLoading(false);
-  }, []);
-  useEffect(() => {
-    fetchProfilesHandler();
-  }, [fetchProfilesHandler]);
-
-  const deleteProfileHandler = async (id) => {
-    await fetch(
-      `https://6195285474c1bd00176c6be7.mockapi.io/profiles/${id}`,
-      {
-        method: "DELETE",
-        body: JSON.stringify(),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then(fetchProfilesHandler);
-  };
+  const { loading, error, getData } = useHttp(
+    "https://6195285474c1bd00176c6be7.mockapi.io/profiles"
+  );
 
   const selectProfileHandler = (props) => {
-    setIsClicked(true);
+    updateProfile(true);
     setProfileId(props.id);
     setProfileName(props.name);
     setProfileImage(props.image);
     setProfileDateOfBirth(props.dateOfBirth);
     setProfileLocation(props.location);
-  };
-
-  const updateProfileHandler = async () => {
-    const updatedProfile = {
-      id: profileId,
-      image: profileImage,
-      name: profileName,
-      dateOfBirth: profileDateOfBirth,
-      location: profileLocation,
-      skills: skName,
-    };
-    await fetch(
-      `https://6195285474c1bd00176c6be7.mockapi.io/profiles/${profileId}`,
-      {
-        method: "PUT",
-        body: JSON.stringify(updatedProfile),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then(fetchProfilesHandler);
   };
 
   const [skillsNames, setSkillsNames] = useState([]);
@@ -125,24 +61,31 @@ const ProfilesList = () => {
     setSkName(typeof value === "string" ? value.split(",") : value);
   };
 
-  const [filteredProfiles, setFilteredProfiles] = useState(profiles);
+  // const [filteredProfiles, setFilteredProfiles] = useState(profiles);
 
-  const filterChangeHandler = (name) => {
-    setFilteredProfiles(
-      name === ""
-        ? profiles
-        : profiles.filter((profile) =>
-            profile.name.toLowerCase().includes(name.toLowerCase())
-          )
-    );
-  };
+  // const filterChangeHandler = (name) => {
+  //   const fProfiles =
+  //     (name &&
+  //       (name.length > 0
+  //         ? profiles
+  //         : profiles.filter((profile) =>
+  //             profile.name.toLowerCase().includes(name.toLowerCase())
+  //           ))) ||
+  //     profiles;
+  //   debugger;
+  //   if (filteredProfiles.length !== fProfiles.length) {
+  //     debugger;
+  //     setFilteredProfiles(fProfiles);
+  //   }
+  // };
+  // filterChangeHandler();
 
   let content = <p>Found no profiles</p>;
 
   if (profiles.length > 0) {
     content = (
       <ul className={classes.profilesList}>
-        {filteredProfiles.map((profile) => (
+        {profiles.map((profile) => (
           <Profile
             key={profile.id}
             id={profile.id}
@@ -159,7 +102,7 @@ const ProfilesList = () => {
     );
   }
 
-  if (isLoading) {
+  if (loading) {
     content = <p>Loading...</p>;
   }
 
@@ -169,9 +112,9 @@ const ProfilesList = () => {
 
   return (
     <>
-      <SearchProfiles onChangeFilter={filterChangeHandler} />
+      {/* <SearchProfiles onChangeFilter={filterChangeHandler} /> */}
       <>{content}</>
-      {isClicked && (
+      {isUpdateOpen && (
         <Box>
           <TextField
             sx={{
@@ -267,7 +210,16 @@ const ProfilesList = () => {
             }}
             variant="contained"
             type="submit"
-            onClick={() => updateProfileHandler()}
+            onClick={() =>
+              updateProfileHandler({
+                profileId,
+                profileImage,
+                profileName,
+                profileDateOfBirth,
+                profileLocation,
+                skName,
+              })
+            }
           >
             Update Profile
           </Button>
